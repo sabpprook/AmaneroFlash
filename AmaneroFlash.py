@@ -66,11 +66,9 @@ with serial.Serial(COMPORT, 115200, 8, 'N', 1) as ser:
     for line in payload:
         data = line.encode('ascii')
         ser.write(data)
-        length = len(data)
-        pbar.update(length)
-        if (length * 1000 / 115200) > 10.0:
-            time.sleep(0.025)
-        else:
-            time.sleep(0.01)
+        time.sleep(0.01)
+        if line != 'W400E1200,A5000005#':
+            ser.read_all()
+        pbar.update(len(data))
 
 time.sleep(1)

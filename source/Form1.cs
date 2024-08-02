@@ -27,21 +27,15 @@ namespace AmaneroFlash
             if (Directory.Exists("CPLD"))
             {
                 var files = Directory.GetFiles(".\\CPLD", "*.txt");
-                comboBox_CPLD.Items.Clear();
                 foreach (var file in files)
-                {
                     comboBox_CPLD.Items.Add(new FWInfo(file));
-                }
             }
 
             if (Directory.Exists("CPU"))
             {
                 var files = Directory.GetFiles(".\\CPU", "*.txt");
-                comboBox_CPU.Items.Clear();
                 foreach (var file in files)
-                {
                     comboBox_CPU.Items.Add(new FWInfo(file));
-                }
             }
         }
 
@@ -53,34 +47,23 @@ namespace AmaneroFlash
                 progressBar.Maximum = fw.GetSize();
             }));
 
-            var buff = new byte[1024];
             var sp = new SerialPort(comport, 115200, Parity.None, 8, StopBits.One);
 
-            sp.DataReceived += (s, e) =>
-            {
-                var size = sp.Read(buff, 0, 1024);
-                Console.WriteLine($"recv: {size} bytes");
-            };
-
             sp.Open();
-
             foreach (var line in fw.GetData())
             {
-                var payload = Encoding.ASCII.GetBytes(line);
+                sp.Write(line);
+                Thread.Sleep(10);
+                if (sp.IsOpen)
+                    sp.ReadExisting();
+
                 var length = line.Length;
-
-                sp.Write(payload, 0, length);
-
                 Invoke(new Action(() => progressBar.Value += length));
                 Console.WriteLine($"send: {length} bytes");
-
-                var wait_time = (length * 1000 / 115200) < 10 ? 10 : 25;
-                Thread.Sleep(wait_time);
             }
+            sp.Close();
 
             Invoke(new Action(() => progressBar.Value = progressBar.Maximum));
-
-            sp.Close();
         }
 
         private void btn_RefreshCom_Click(object sender, EventArgs e)
