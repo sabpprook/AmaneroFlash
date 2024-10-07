@@ -25,6 +25,7 @@ CPU = {
     'DSD512x48x44': 'firmware/CPU/DSD512x48x44.txt',
     'firmware_1096c3w2': 'firmware/CPU/firmware_1096c3w2.txt',
     'firmware_1096c4w2': 'firmware/CPU/firmware_1096c4w2.txt',
+    'firmware_1096c3w9_162432': 'firmware/CPU/firmware_1096c3w9_162432.txt',
     'firmware_1099c': 'firmware/CPU/firmware_1099c.txt',
     'firmware_1099akm': 'firmware/CPU/firmware_1099akm.txt',
     'firmware_2006be10': 'firmware/CPU/firmware_2006be10.txt',
